@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  dex:
+    image: dexidp/dex:v2.26.0
+
+  ldap:
+    image: osixia/openldap:1.4.0
+    command: ["--copy-service"]
+    volumes:
+      - ./config-ldap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/config-ldap.ldif
+    ports:
+      - 389:389
+      - 636:636

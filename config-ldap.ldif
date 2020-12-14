@@ -1,0 +1,44 @@
+# Already included in default config of Docker image
+#
+# dn: dc=example,dc=org
+# objectClass: dcObject
+# objectClass: organization
+# o: Nooxit
+# dc: Example
+
+dn: ou=People,dc=linnify,dc=org
+objectClass: organizationalUnit
+ou: People
+
+dn: cn=vlad,ou=People,dc=linnify,dc=org
+objectClass: person
+objectClass: inetOrgPerson
+sn: rusu
+cn: vlad
+mail: vlad.rusu@linnify.com
+userpassword: test1234
+
+dn: cn=razvan,ou=People,dc=linnify,dc=org
+objectClass: person
+objectClass: inetOrgPerson
+sn: bretoiu
+cn: razvan
+mail: razvan.bretoiu@linnify.com
+userpassword: test1234
+
+# Groups
+
+dn: ou=Groups,dc=linnify,dc=org
+objectClass: organizationalUnit
+ou: Groups
+
+dn: cn=list,ou=Groups,dc=linnify,dc=org
+objectClass: groupOfNames
+cn: list
+member: cn=vlad,ou=People,dc=linnify,dc=org
+member: cn=razvan,ou=People,dc=linnify,dc=org
+
+dn: cn=detail,ou=Groups,dc=linnify,dc=org
+objectClass: groupOfNames
+cn: detail
+member: cn=vlad,ou=People,dc=linnify,dc=org
