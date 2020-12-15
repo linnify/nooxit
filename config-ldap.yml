@@ -13,6 +13,7 @@ connectors:
     config:
       host: ldap:389
       insecureNoSSL: true
+
       bindDN: cn=admin,dc=linnify,dc=org
       bindPW: admin
 
