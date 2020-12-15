@@ -1,5 +1,5 @@
-import {useLocation} from "react-router-dom";
-import {useEffect, useState} from "react";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 const queryString = require('query-string');
 
 const LOCAL_STORAGE_TOKEN = 'auth-token'
