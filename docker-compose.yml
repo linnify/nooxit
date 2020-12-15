@@ -14,9 +14,31 @@ services:
     image: osixia/openldap:1.4.0
     command: ["--copy-service"]
     volumes:
-      - ./config-ldap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/config-ldap.ldif
+#      - ./config-ldap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/config-ldap.ldif
+      - /var/lib/ldap
+      - /etc/ldap/slap.d
+      - /container/service/slapd/assets/certs
     ports:
       - 389:389
       - 636:636
     environment:
       - LDAP_DOMAIN="linnify.org"
+      - LDAP_LOG_LEVEL=256
+      - LDAP_ADMIN_PASSWORD=admin
+      - LDAP_CONFIG_PASSWORD=config
+      - LDAP_RFC2307BIS_SCHEMA=false
+      - LDAP_BACKEND=mdb
+    domainname: "linnify.org"
+    hostname: "linnify.org"
+    tty: true
+    stdin_open: true
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: ldap
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:
+      - 8080:80
+    depends_on:
+      - ldap
