@@ -1,8 +1,8 @@
-issuer: http://127.0.0.1:5556/dex
+issuer: http://0.0.0.0:5556/dex
 storage:
   type: sqlite3
   config:
-    file: linnify/dex.db
+    file: ":memory:"
 web:
   http: 0.0.0.0:5556
 
@@ -11,7 +11,7 @@ connectors:
     name: OpenLDAP
     id: ldap
     config:
-      host: localhost:389
+      host: ldap:389
       insecureNoSSL: true
       bindDN: cn=admin,dc=linnify,dc=org
       bindPW: admin
@@ -21,6 +21,7 @@ connectors:
       userSearch:
         baseDN: ou=People,dc=linnify,dc=org
         filter: "(objectClass=person)"
+        username: mail
         idAttr: DN
         emailAttr: mail
         nameAttr: cn
@@ -38,6 +39,6 @@ connectors:
 staticClients:
   - id: linnify-app
     redirectURIs:
-      - http://123.0.0.1:5555/callback
+      - http://127.0.0.1:5555/callback
     name: "Linnify app"
     secret: ZXhhbXBsZS1hcHAtc2VjcmV0

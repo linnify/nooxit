@@ -3,6 +3,12 @@ version: "3.8"
 services:
   dex:
     image: dexidp/dex:v2.26.0
+    ports:
+      - 5556:5556
+    volumes:
+      - ./config-ldap.yml:/tmp/dex-config/config-ldap.yml
+      - ./dex.db:/data/dex.db
+    command: ["serve", "/tmp/dex-config/config-ldap.yml"]
 
   ldap:
     image: osixia/openldap:1.4.0
@@ -12,3 +18,5 @@ services:
     ports:
       - 389:389
       - 636:636
+    environment:
+      - LDAP_DOMAIN="linnify.org"
