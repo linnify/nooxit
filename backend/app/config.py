@@ -9,8 +9,8 @@ class Settings(BaseSettings):
     CLIENT_SECRET: str
     CLIENT_ID: str = 'linnify-app'
     
-    
     AUTHORIZATION_URL: str = 'http://127.0.0.1:5556/dex/auth'
+    AUTHORIZATION_TOKEN_URL: str = 'http://0.0.0.0:5556/dex/token'
     
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000"]'

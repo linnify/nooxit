@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter, Depends
 from fastapi.openapi.models import OAuthFlows, OAuthFlowAuthorizationCode
-from fastapi.security import OAuth2
+from fastapi.security import OAuth2, OpenIdConnect
 from starlette.middleware.cors import CORSMiddleware
 
 from app.config import settings
@@ -9,19 +9,14 @@ from app.endpoints import auth
 api_router = APIRouter()
 api_router.include_router(auth.router, tags=["auth"])
 
-app = FastAPI(
-    title=settings.PROJECT_NAME
-)
+app = FastAPI(title=settings.PROJECT_NAME)
 app.include_router(api_router)
-
-
-base_url = 'http://127.0.0.1:5556/dex'
 
 oauth2_scheme = OAuth2(
     flows=OAuthFlows(
         authorizationCode=OAuthFlowAuthorizationCode(
-            authorizationUrl=f"{base_url}/auth",
-            tokenUrl='http://localhost:8000/auth/callback',
+            authorizationUrl=settings.AUTHORIZATION_URL,
+            tokenUrl=settings.AUTHORIZATION_TOKEN_URL,
             scopes={
                 'openid': 'OpenID',
                 'email': 'Email',
@@ -48,4 +43,5 @@ if settings.BACKEND_CORS_ORIGINS:
 @app.get("/")
 async def root(token: str = Depends(oauth2_scheme)):
     print(token)
+
     return {"message": "Ok"}
