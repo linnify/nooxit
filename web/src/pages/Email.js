@@ -1,6 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 function Email() {
+  
+  useEffect(() => {
+    // Make the Http call
+  
+    // if we receive 403 show login button
+  }, [])
   
   return (
     <div>

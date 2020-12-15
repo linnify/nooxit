@@ -1,6 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
-function Profile() {
+function Profile(props) {
+  
+  useEffect(() => {
+    // Make the Http call
+    
+    // if we receive 403 than don't display the data to the user
+  }, [])
   
   return (
     <div>
