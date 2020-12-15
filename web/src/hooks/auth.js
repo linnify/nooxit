@@ -20,9 +20,9 @@ function useAuth() {
   
   useEffect(() => {
     const parsed = queryString.parse(location.search);
-    if (parsed.token) {
-      setUser(parsed.token)
-      setLocalUser(parsed.token)
+    if (parsed.user) {
+      setUser(parsed.user)
+      setLocalUser(parsed.user)
     }
     
     setIsLoading(false);

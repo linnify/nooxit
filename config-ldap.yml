@@ -40,5 +40,6 @@ staticClients:
   - id: linnify-app
     redirectURIs:
       - http://localhost:8000/auth/callback
+      - http://localhost:8000/docs/oauth2-redirect
     name: "Linnify app"
     secret: ZXhhbXBsZS1hcHAtc2VjcmV0

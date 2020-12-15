@@ -16,7 +16,7 @@ function Home() {
     <div>
       { isLoading && <LoadingPage /> }
       
-      { !isLoading && !isLoggedIn && <Login />}
+      { !isLoading && !isLoggedIn && <Login scope={'email'}/>}
       
       { !isLoading && isLoggedIn && <div>
         <Nav/>
