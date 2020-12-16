@@ -4,6 +4,8 @@ FROM python:3.7
 ENV PYTHONUNBUFFERED 1
 ENV APP_HOME /app
 
+ENV PORT 8000
+
 # create root directory for our project in the container
 RUN mkdir $APP_HOME
 
@@ -26,4 +28,4 @@ COPY . /app/
 EXPOSE $PORT
 
 # Run the gunicorn web server with 1 worker and 8 threads
-CMD exec gunicorn --bind :$PORT --workers 2 --threads 8 --timeout 120 -k uvicorn.workers.UvicornWorker -b 0.0.0.0 app.main:app
+CMD exec gunicorn --bind :$PORT --workers 2 --threads 8 --timeout 120 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8001 app.main:app
