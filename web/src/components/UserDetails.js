@@ -28,6 +28,7 @@ const LogoutButton = styled.button`
   outline: none;
   cursor: pointer;
   border: 0;
+  margin-top: 18px;
 `
 
 function UserDetails({user, logout}) {
@@ -35,12 +36,14 @@ function UserDetails({user, logout}) {
   const onLogout = () => logout()
   
   const emailVerified = user.email_verified ? 'Yes' : 'No'
+  const groups = user.groups.join(", ")
   
   return (
     <Container>
       <Box>
         <div> {user.name} - { user.email }</div>
         <p> Email verified: { emailVerified }</p>
+        <div> Groups: { groups }</div>
         <LogoutButton onClick={onLogout}> Logout </LogoutButton>
       </Box>
     </Container>

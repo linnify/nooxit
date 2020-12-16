@@ -16,8 +16,23 @@ class Dex:
         super().__init__()
     
     def exchange(self, code: str):
+        """
+        Exchange code for an Access Token and ID Token
+        :param code:
+        :return:
+        """
+        data = {
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
+            'grant_type': 'authorization_code',
+            'code': code,
+            'redirect_uri': settings.AUTHORIZATION_REDIRECT_URI
+        }
         
-        pass
+        response = requests.post(settings.AUTHORIZATION_TOKEN_URL, data=data)
+        response.raise_for_status()
+        
+        return response.json()
     
     def user_profile(self, token: str):
         headers = {'Authorization': f'{self.token_type} {token}'}
