@@ -12,8 +12,8 @@ def get_users(user=Depends(get_current_user)):
     Return the users only if the user has been granted with user scope
      :return: all the users
     """
-    groups = user.get('groups', [])
-    if 'list' not in groups:
+    groups = user.get('groups')
+    if 'users' not in groups:
         raise HTTPException(
             status_code=403,
             detail="You don't have permission to view the users"
@@ -28,5 +28,11 @@ def get_members(user=Depends(get_current_user)):
     Return the profiles only if the user has been granted with user scope
     :return: all the members
     """
+    groups = user.get('groups')
+    if 'members' not in groups:
+        raise HTTPException(
+            status_code=403,
+            detail="You don't have permission to view the members"
+        )
     
     return members.get_all_members()

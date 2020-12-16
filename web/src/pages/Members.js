@@ -18,7 +18,9 @@ function Members() {
   
   return (
     <div>
-      <h1>This is the Members page</h1>
+      <h1>Members Page</h1>
+      <div style={{ marginBottom: '18px'}}>Members page is accessible only for the users that belongs to the 'members' group </div>
+  
       <ErrorMessage message={error}/>
       <MemberList>
         { renderMembers }

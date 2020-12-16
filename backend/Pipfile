@@ -13,7 +13,6 @@ fastapi = "*"
 uvicorn = "*"
 gunicorn = "*"
 pydantic = {extras = ["dotenv"], version = "*"}
-requests-oauthlib = "*"
 requests = "*"
 
 [requires]
