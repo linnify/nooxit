@@ -18,13 +18,12 @@ async def auth(data: AuthLogin, request: Request):
     Return SSO Page URL
     """
     state = json.dumps({'success_url': data.redirect_page})
-    scopes = " ".join(data.scope)
     
     authorize_url = f'{settings.AUTHORIZATION_URL}?response_type=code&response_mode=query'  # noqa
     authorize_url += f'&client_id={settings.CLIENT_ID}'
     authorize_url += f'&redirect_uri={settings.AUTHORIZATION_REDIRECT_URI}'
     authorize_url += f'&state={state}'
-    authorize_url += f'&scope=openid {scopes}'
+    authorize_url += f'&scope=openid email profile groups'
 
     return {
         'authorization_url': authorize_url

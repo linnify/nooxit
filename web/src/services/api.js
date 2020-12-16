@@ -10,12 +10,23 @@ export async function getProfile() {
 
 export async function getMembers() {
   const url = `${API_HOST}/members`
-  const response = await axios.get(url, { headers: getAuthHeader() })
-  return response.data
+  try {
+    const response = await axios.get(url, {headers: getAuthHeader()})
+    return response.data
+  } catch (e) {
+    const message = e.response.data?.detail;
+    throw new Error(message)
+  }
 }
 
 export async function getUsers() {
   const url = `${API_HOST}/users`
-  const response = await axios.get(url, { headers: getAuthHeader() })
-  return response.data
+  try {
+    const response = await axios.get(url, {headers: getAuthHeader()})
+    return response.data
+  } catch (e) {
+    const message = e.response.data?.detail;
+    throw new Error(message)
+  }
+  
 }

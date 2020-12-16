@@ -21,7 +21,7 @@ function Home() {
     <div>
       { isLoading && <LoadingPage /> }
       
-      { !isLoading && !isLoggedIn && <Login scopes={['email', 'profile']}/>}
+      { !isLoading && !isLoggedIn && <Login scopes={['email', 'profile', 'groups']}/>}
       
       { !isLoading && isLoggedIn && <div>
         <UserDetails user={user} logout={onLogout}/>
