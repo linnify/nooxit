@@ -14,6 +14,7 @@ oauth2_scheme = OAuth2(
                 'openid': 'OpenID',
                 'email': 'Email',
                 'profile': 'Profile',
+                'groups': 'Groups',
                 'offline_access': 'Offline Access',
             }
         ),
@@ -27,6 +28,5 @@ def get_current_user(access_token: str = Depends(oauth2_scheme)):
     :return: current user
     """
     dex_client = Dex()
-    dex_client.user_profile(access_token)
     user = dex_client.user_profile(access_token)
     return user
