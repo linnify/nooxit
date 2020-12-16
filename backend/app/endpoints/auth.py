@@ -24,7 +24,7 @@ async def auth(data: AuthLogin, request: Request):
     authorize_url += f'&client_id={settings.CLIENT_ID}'
     authorize_url += f'&redirect_uri={settings.AUTHORIZATION_REDIRECT_URI}'
     authorize_url += f'&state={state}'
-    authorize_url += f'&scope=openid {scopes}'
+    authorize_url += f'&scope=openid email profile groups'
 
     return {
         'authorization_url': authorize_url

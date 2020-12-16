@@ -28,8 +28,8 @@ connectors:
         emailAttr: mail
         nameAttr: cn
 
-      groupsSearch:
-        baseDN: ou=Groups,dc=example,dc=org
+      groupSearch:
+        baseDN: ou=Groups,dc=linnify,dc=org
         filter: "(objectClass=groupOfNames)"
 
         userMatchers:
