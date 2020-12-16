@@ -3,6 +3,8 @@ version: "3.8"
 services:
   dex:
     image: dexidp/dex:v2.26.0
+    networks:
+      ldapnet:
     ports:
       - 5556:5556
     volumes:
@@ -16,6 +18,8 @@ services:
       context: ./backend
     env_file:
       - ./backend/.env
+    networks:
+      ldapnet:
     ports:
       - 8000:8000
 
@@ -23,6 +27,8 @@ services:
     build:
       dockerfile: ./Dockerfile
       context: ./web
+    networks:
+      ldapnet:
     ports:
       - 3000:3000
 
@@ -35,6 +41,8 @@ services:
       - /var/lib/ldap
       - /etc/ldap/slap.d
       - /container/service/slapd/assets/certs
+    networks:
+      ldapnet:
     ports:
       - 389:389
     domainname: "linnify.org"
@@ -47,7 +55,17 @@ services:
     environment:
       PHPLDAPADMIN_LDAP_HOSTS: ldap
       PHPLDAPADMIN_HTTPS: "false"
+    networks:
+      ldapnet:
     ports:
       - 8080:80
     depends_on:
       - ldap
+
+networks:
+  ldapnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.0.0/16
+          gateway: 172.31.0.1
