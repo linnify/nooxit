@@ -1,6 +1,8 @@
+from typing import List
+
 from pydantic import BaseModel
 
 
 class AuthLogin(BaseModel):
-    scope: str
+    scope: List[str]
     redirect_page: str

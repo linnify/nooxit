@@ -1,8 +1,8 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
+import {clearLocalToken, getLocalToken, setLocalToken} from "../helpers/utils";
+import {getProfile} from "../services/api";
 const queryString = require('query-string');
-
-const LOCAL_STORAGE_TOKEN = 'auth-token'
 
 /**
  * Hook for checking if the current user is authenticated
@@ -12,34 +12,52 @@ const LOCAL_STORAGE_TOKEN = 'auth-token'
  * If the URL has a token in the query param, grab the token and set the user
  */
 function useAuth() {
-  
-  const initialUser = getLocalUser();
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState(initialUser)
+  const [user, setUser] = useState(null)
   const location = useLocation()
+  const history = useHistory()
+  
   
   useEffect(() => {
     const parsed = queryString.parse(location.search);
-    if (parsed.user) {
-      setUser(parsed.user)
-      setLocalUser(parsed.user)
+    if (parsed.token) {
+      history.replace(location.pathname, {
+        search: '',
+      })
+      setLocalToken(parsed.token)
+    }
+    const currentToken = getLocalToken()
+    if (!currentToken) {
+      // User not authenticated
+      setIsLoading(false);
+      return;
     }
     
-    setIsLoading(false);
+    loadUserProfile()
   }, [])
   
-  function getLocalUser() {
-    const userAsString = localStorage.getItem(LOCAL_STORAGE_TOKEN)
-    if (userAsString) {
-      return JSON.parse(userAsString)
+  /**
+   * Load the user profile
+   * If there is an error logout the user
+   * @return {Promise<void>}
+   */
+  async function loadUserProfile() {
+    try {
+      const profile = await getProfile()
+      setUser(profile)
+    } catch (e) {
+      logout()
+    } finally {
+      setIsLoading(false);
     }
   }
   
-  function setLocalUser(user) {
-    localStorage.setItem(LOCAL_STORAGE_TOKEN, JSON.stringify(user))
+  function logout() {
+    clearLocalToken()
+    setUser(null)
   }
   
-  return [user, isLoading]
+  return [user, isLoading, logout]
 }
 
 export default useAuth

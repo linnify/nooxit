@@ -5,6 +5,7 @@ storage:
     file: ":memory:"
 web:
   http: 0.0.0.0:5556
+  allowedOrigins: ['*']
 
 connectors:
   - type: ldap

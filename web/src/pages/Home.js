@@ -2,30 +2,38 @@ import React from "react";
 import Login from "../components/Login";
 import {Route, Switch} from "react-router-dom";
 import Nav from "../components/Nav";
-import Profile from "./Profile";
-import Email from "./Email";
+import Members from "./Members";
+import Users from "./Users";
 import LoadingPage from "../components/LoadingPage";
 import useAuth from "../hooks/auth";
+import UserDetails from "../components/UserDetails";
 
 
 function Home() {
-  const [user, isLoading] = useAuth()
+  const [user, isLoading, logout] = useAuth()
   const isLoggedIn = !!user;
+  
+  const onLogout = () => {
+    logout()
+  }
   
   return (
     <div>
       { isLoading && <LoadingPage /> }
       
-      { !isLoading && !isLoggedIn && <Login scope={'email'}/>}
+      { !isLoading && !isLoggedIn && <Login scopes={['email', 'profile']}/>}
       
       { !isLoading && isLoggedIn && <div>
+        <UserDetails user={user} logout={onLogout}/>
+        
         <Nav/>
+        
         <Switch>
-          <Route path="/users">
-            <Profile isLoggedIn={isLoggedIn}/>
+          <Route path="/members">
+            <Members isLoggedIn={isLoggedIn}/>
           </Route>
           <Route path="/">
-            <Email isLoggedIn={isLoggedIn}/>
+            <Users isLoggedIn={isLoggedIn}/>
           </Route>
         </Switch>
       </div>

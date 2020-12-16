@@ -23,19 +23,12 @@ const LoginButton = styled.button`
   border: 0;
 `
 
-function Login({ scope }) {
+function Login({ scopes }) {
   
   const onLogin = async () => {
     const url = `${API_HOST}/auth/login`
     const redirectPage = window.location.href
-    const response = await axios.post(url, { redirect_page: redirectPage, scope })
-  
-    // const authWindow = window.open(response.data.authorization_url);
-    // authWindow.onClose = function (authenticationSuccessUrl) {
-    //   authWindow.close();
-    //   window.location = authenticationSuccessUrl;
-    // }
-    
+    const response = await axios.post(url, { redirect_page: redirectPage, scope: scopes })
     window.location = response.data.authorization_url
   };
 
