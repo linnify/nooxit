@@ -1,16 +1,65 @@
 version: "3.8"
 
 services:
-  dex:
-    image: dexidp/dex:v2.26.0
-    networks:
-      ldapnet:
+  hydra-db:
+    image: postgres:9.6
     ports:
-      - 5556:5556
-    volumes:
-      - ./config-ldap.yml:/tmp/dex-config/config-ldap.yml
-      - ./dex.db:/data/dex.db
-    command: ["serve", "/tmp/dex-config/config-ldap.yml"]
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: hydrapassword
+      POSTGRES_USER: hydra
+      POSTGRES_DB: hydra
+    networks:
+      - ldapnet
+
+  hydra:
+    image: oryd/hydra:v1.9.0-alpha.3
+    ports:
+      - "4444:4444" # Public port
+      - "4445:4445" # Admin port
+      - "5555:5555" # Port for hydra token user
+    command:
+      serve all --dangerous-force-http
+    environment:
+      - DSN=postgres://hydra:hydrapassword@hydra-db:5432/hydra?sslmode=disable&max_conns=20&max_idle_conns=4
+      - SECRETS_SYSTEM=ZXhhbXBsZS1hcHAtc2VjcmV0
+      - URLS_SELF_ISSUER=http://127.0.0.1:4444/
+      - URLS_CONSENT=http://127.0.0.1:8001/consent # Auth API
+      - URLS_LOGIN=http://127.0.0.1:8001/login # Auth API
+    restart: unless-stopped
+    depends_on:
+      - hydra-migrate
+    networks:
+      - ldapnet
+
+  hydra-migrate:
+    image: oryd/hydra:v1.9.0-alpha.3
+    environment:
+      - DSN=postgres://hydra:hydrapassword@hydra-db:5432/hydra?sslmode=disable&max_conns=20&max_idle_conns=4
+    command:
+      migrate sql -e --yes
+    restart: on-failure
+    networks:
+      - ldapnet
+
+  hydra-create-client:
+    image: oryd/hydra:v1.9.0-alpha.3
+    depends_on:
+      - hydra
+    command: clients create -n "Linnify App" --endpoint http://hydra:4445 --id linnify-app --secret LinnifySecret --grant-types authorization_code --response-types code --scope openid,email,username,groups,offline_access --token-endpoint-auth-method client_secret_basic --callbacks "http://127.0.0.1:8000/auth/callback,http://127.0.0.1:8000/docs/oauth2-redirect"
+    networks:
+      - ldapnet
+
+#  dex:
+#    image: dexidp/dex:v2.26.0
+#    networks:
+#      ldapnet:
+#    ports:
+#      - 5556:5556
+#    volumes:
+#      - ./config-ldap.yml:/tmp/dex-config/config-ldap.yml
+#      - ./dex.db:/data/dex.db
+#    command: ["serve", "/tmp/dex-config/config-ldap.yml"]
 
   api:
     build:

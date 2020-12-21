@@ -1,6 +1,6 @@
 import React from "react";
 import Login from "../components/Login";
-import {Route, Switch} from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Nav from "../components/Nav";
 import Members from "./Members";
 import Users from "./Users";
@@ -11,29 +11,25 @@ import UserDetails from "../components/UserDetails";
 
 function Home() {
   const [user, isLoading, logout] = useAuth()
-  const isLoggedIn = !!user;
-  
-  const onLogout = () => {
-    logout()
-  }
+  const onLogout = () => logout()
   
   return (
     <div>
       { isLoading && <LoadingPage /> }
       
-      { !isLoading && !isLoggedIn && <Login scopes={['email', 'profile', 'groups']}/>}
+      { !isLoading && !user && <Login scopes={['email', 'profile', 'groups']}/>}
       
-      { !isLoading && isLoggedIn && <div>
+      { !isLoading && user && <div>
         <UserDetails user={user} logout={onLogout}/>
         
         <Nav/>
         
         <Switch>
           <Route path="/members">
-            <Members isLoggedIn={isLoggedIn}/>
+            <Members />
           </Route>
           <Route path="/">
-            <Users isLoggedIn={isLoggedIn}/>
+            <Users />
           </Route>
         </Switch>
       </div>

@@ -23,7 +23,7 @@ async def auth(data: AuthLogin):
     authorize_url += f'&client_id={settings.CLIENT_ID}'
     authorize_url += f'&redirect_uri={settings.AUTHORIZATION_REDIRECT_URI}'
     authorize_url += f'&state={state}'
-    authorize_url += f'&scope=openid email profile groups'
+    authorize_url += f'&scope=openid offline_access'
 
     return {
         'authorization_url': authorize_url
@@ -43,6 +43,7 @@ async def auth_callback(state: Optional[str], code: Optional[str] = None, error:
     dex_client = Dex()
     token = dex_client.exchange(code)
     
+    print(token)
     # Attach the access token in query params so the client can use it
     redirect_url += f"?token={token.get('access_token')}"
     return RedirectResponse(redirect_url)
