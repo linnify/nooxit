@@ -3,7 +3,7 @@ import requests
 from app.config import settings
 
 
-class Dex:
+class Oauth2Client:
     
     def __init__(
         self,
@@ -18,8 +18,7 @@ class Dex:
     def exchange(self, code: str):
         """
         Exchange code for an Access Token and ID Token
-        :param code:
-        :return:
+        :param code: str
         """
         data = {
             'client_id': self.client_id,

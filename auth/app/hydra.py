@@ -1,5 +1,5 @@
 from ory_hydra_client import Configuration, ApiClient, AdminApi, LoginRequest, \
-    CompletedRequest
+    CompletedRequest, ConsentRequest
 
 from app.config import settings
 
@@ -14,16 +14,20 @@ class Hydra:
     def get_login_request(self, challenge) -> LoginRequest:
         return self.client.get_login_request(challenge)
     
-    def get_redirect_url(self, challenge, subject) -> str:
-        data: CompletedRequest = self.client.accept_login_request(challenge, subject=subject)
-        return data.redirect_to
-    
-    def reject_login_request(self, challenge):
+    def reject_login(self, challenge):
         body = {
             'error': 'access_denied',
             'error_description': 'The resource owner denied the request'
         }
         data: CompletedRequest = self.client.reject_login_request(challenge, body=body)
+        return data.redirect_to
+    
+    def reject_consent(self, challenge) -> str:
+        body = {
+            'error': 'scoped_denied',
+            'error_description': 'The resource owner denied the scope'
+        }
+        data = self.client.reject_consent_request(challenge, body=body)
         return data.redirect_to
     
     def accept_login_request(self, challenge: str, email: str) -> str:
@@ -34,9 +38,8 @@ class Hydra:
         
         body = {
             'subject': email,
-            'remember': True,
-            'remember_for': 3600,
-            'acr': '2'
+            'remember': False,
+            'acr': acr_values
         }
         data: CompletedRequest = self.client.accept_login_request(
             challenge,
@@ -44,3 +47,16 @@ class Hydra:
         )
         
         return data.redirect_to
+    
+    def accept_consent(self, consent: ConsentRequest, data: dict):
+        data['email'] = consent.subject
+        body = {
+            'grant_scope': consent.requested_scope,
+            'grant_access_token_audience': consent.requested_access_token_audience,
+            'session': {
+                'id_token': data
+            }
+        }
+    
+        response = self.client.accept_consent_request(consent.challenge, body=body)
+        return response.redirect_to

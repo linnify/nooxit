@@ -4,14 +4,15 @@ import Members from "../pages/Members";
 import Users from "../pages/Users";
 
 
-export const HomeRoutes = () => {
+export const HomeRoutes = ({user}) => {
+  
   return (
     <Switch>
       <Route path="/members">
-        <Members />
+        <Members user={user}/>
       </Route>
       <Route path="/">
-        <Users />
+        <Users user={user} />
       </Route>
     </Switch>
   )

@@ -1,12 +1,10 @@
 import React from "react";
 import Login from "../components/Login";
-import { Route, Switch } from "react-router-dom";
 import Nav from "../components/Nav";
-import Members from "./Members";
-import Users from "./Users";
 import LoadingPage from "../components/LoadingPage";
 import useAuth from "../hooks/auth";
 import UserDetails from "../components/UserDetails";
+import {HomeRoutes} from "../routes";
 
 
 function Home() {
@@ -24,14 +22,7 @@ function Home() {
         
         <Nav/>
         
-        <Switch>
-          <Route path="/members">
-            <Members />
-          </Route>
-          <Route path="/">
-            <Users />
-          </Route>
-        </Switch>
+        <HomeRoutes user={user} />
       </div>
       }
     </div>
