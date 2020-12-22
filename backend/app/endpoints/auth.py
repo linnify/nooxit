@@ -1,10 +1,11 @@
 import json
 from typing import Optional
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from starlette.responses import RedirectResponse
 
 from app.config import settings
+from app.helpers.deps import get_current_user
 from app.helpers.oauth2 import Oauth2Client
 from app.models import AuthLogin
 
@@ -45,3 +46,8 @@ async def auth_callback(state: Optional[str], code: Optional[str] = None, error:
     # Attach the access token in query params so the client can use it
     redirect_url += f"?token={access_token}&id_token={id_token}"
     return RedirectResponse(redirect_url)
+
+
+@router.get('/auth/profile')
+def auth_profile(user=Depends(get_current_user)):
+    return user

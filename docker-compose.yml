@@ -26,7 +26,6 @@ services:
       - URLS_SELF_ISSUER=http://0.0.0.0:4444/
       - URLS_CONSENT=http://0.0.0.0:8001/consent
       - URLS_LOGIN=http://0.0.0.0:8001/login
-      - LOG_LEAK_SENSITIVE_VALUES=true
       - SERVE_COOKIES_SAME_SITE_MODE=Lax
       - WEBFINGER_OIDC_DISCOVERY_SUPPORTED_SCOPE=email,name,groups
     restart: unless-stopped
